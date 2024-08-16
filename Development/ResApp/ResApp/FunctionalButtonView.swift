@@ -4,45 +4,41 @@ struct FunctionalButtonView: View {
     @EnvironmentObject var resuscitationManager: ResuscitationManager
     @State private var currentTime = Date()
     @State private var timer: Timer?
+    @State private var showEndConfirmation = false
     
     var body: some View {
-        GeometryReader { geometry in
-            HStack(spacing: 0) {
-                // Left side: ECG, Defibrillation, and Medication
-                VStack(spacing: 20) {
-                    // Timer and END button
-                    HStack {
-                        Text("Timer: \(formattedElapsedTime)")
-                            .font(.system(size: 28, weight: .bold))
-                        Spacer()
-                        Button(action: {
-                            resuscitationManager.endResuscitation()
-                        }) {
-                            HStack {
-                                Image(systemName: "stop.circle.fill")
-                                Text("END")
+            GeometryReader { geometry in
+                HStack(spacing: 0) {
+                    // Left side: ECG, Defibrillation, and Medication
+                    VStack(spacing: 20) {
+                        // Timer and END button
+                        HStack {
+                            Text("Timer: \(formattedElapsedTime)")
+                                .font(.system(size: 28, weight: .bold))
+                            Spacer()
+                            Button(action: {
+                                showEndConfirmation = true  // Show confirmation instead of ending directly
+                            }) {
+                                HStack {
+                                    Image(systemName: "stop.circle.fill")
+                                    Text("END")
+                                }
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 15)
+                                .background(Color.orange)
+                                .foregroundColor(.white)
+                                .cornerRadius(15)
+                                .font(.system(size: 24, weight: .bold))
                             }
-                            .padding(.horizontal, 30)
-                            .padding(.vertical, 15)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(15)
-                            .font(.system(size: 24, weight: .bold))
                         }
-                    }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
                     
-                    // ECG Rhythm
-                    VStack(alignment: .center, spacing: 10) {
-                        Text("ECG Rhythm")
-                            .font(.system(size: 32, weight: .bold))
-                        
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                            ECGButton(title: "AS", icon: "waveform.path.ecg")
-                            ECGButton(title: "PEA", icon: "waveform.path.ecg.rectangle")
-                            ECGButton(title: "VT", icon: "waveform.path.ecg.rectangle.fill")
-                            ECGButton(title: "VF", icon: "waveform.path")
-                        }
+                    // ECG Rhythm (title removed)
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        ECGButton(title: "AS", icon: "waveform.path.ecg")
+                        ECGButton(title: "PEA", icon: "waveform.path.ecg.rectangle")
+                        ECGButton(title: "VT", icon: "waveform.path.ecg.rectangle.fill")
+                        ECGButton(title: "VF", icon: "waveform.path")
                     }
                     .frame(maxWidth: .infinity)
                     
@@ -56,23 +52,18 @@ struct FunctionalButtonView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.orange)
+                        .background(Color.red) // Changed from orange to red
                         .foregroundColor(.white)
                         .cornerRadius(15)
                         .font(.system(size: 28, weight: .bold))
                     }
                     
-                    // Medication
-                    VStack(alignment: .center, spacing: 10) {
-                        Text("Medication")
-                            .font(.system(size: 32, weight: .bold))
-                        
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                            MedicationButton(title: "Epinephrine", icon: "syringe.fill")
-                            MedicationButton(title: "Amiodarone", icon: "pill.fill")
-                            MedicationButton(title: "Lidocaine", icon: "cross.vial.fill")
-                            MedicationButton(title: "Magnesium", icon: "atom")
-                        }
+                    // Medication (title removed)
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        MedicationButton(title: "Epinephrine", icon: "syringe.fill")
+                        MedicationButton(title: "Amiodarone", icon: "pill.fill")
+                        MedicationButton(title: "Lidocaine", icon: "cross.vial.fill")
+                        MedicationButton(title: "Magnesium", icon: "atom")
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -91,6 +82,16 @@ struct FunctionalButtonView: View {
         .onDisappear {
             stopTimer()
         }
+        .alert(isPresented: $showEndConfirmation) {
+                    Alert(
+                        title: Text("End Resuscitation?"),
+                        message: Text("Are you sure you want to end the resuscitation? This action cannot be undone."),
+                        primaryButton: .destructive(Text("End Resuscitation")) {
+                            resuscitationManager.endResuscitation()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
     }
     
     private var formattedElapsedTime: String {
