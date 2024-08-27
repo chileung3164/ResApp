@@ -2,257 +2,237 @@ import SwiftUI
 
 struct FunctionalButtonView: View {
     @EnvironmentObject var resuscitationManager: ResuscitationManager
-    @State private var currentTime = Date()
-    @State private var timer: Timer?
+    @StateObject private var guidelineSystem = SmartResuscitationGuidelineSystem()
     @State private var showEndConfirmation = false
-    
+    @State private var showPostCareAlert = false
+    @State private var isROSCAchieved = false
+    @State private var showAttentionEffect = false
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
-            GeometryReader { geometry in
+        GeometryReader { geometry in
+            ZStack {
                 HStack(spacing: 0) {
-                    // Left side: ECG, Defibrillation, and Medication
-                    VStack(spacing: 20) {
-                        // Timer and END button
+                    // Left side: Timer, ECG, Defibrillation, and Medication
+                    VStack {
                         HStack {
                             Text("Timer: \(formattedElapsedTime)")
-                                .font(.system(size: 28, weight: .bold))
+                                .font(.system(size: 44, weight: .bold))
                             Spacer()
                             Button(action: {
-                                showEndConfirmation = true  // Show confirmation instead of ending directly
+                                showEndConfirmation = true
                             }) {
-                                HStack {
-                                    Image(systemName: "stop.circle.fill")
-                                    Text("END")
-                                }
-                                .padding(.horizontal, 30)
-                                .padding(.vertical, 15)
-                                .background(Color.orange)
-                                .foregroundColor(.white)
-                                .cornerRadius(15)
-                                .font(.system(size: 24, weight: .bold))
+                                Text("END")
+                                    .padding(.horizontal, 30)
+                                    .padding(.vertical, 15)
+                                    .background(Color.orange)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(25)
+                                    .font(.system(size: 24, weight: .bold))
                             }
                         }
-                        .padding(.horizontal)
-                    
-                    // ECG Rhythm (title removed)
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                        ECGButton(title: "AS", icon: "waveform.path.ecg")
-                        ECGButton(title: "PEA", icon: "waveform.path.ecg.rectangle")
-                        ECGButton(title: "VT", icon: "waveform.path.ecg.rectangle.fill")
-                        ECGButton(title: "VF", icon: "waveform.path")
-                    }
-                    .frame(maxWidth: .infinity)
-                    
-                    // Defibrillation Button
-                    Button(action: {
-                        resuscitationManager.performDefibrillation()
-                    }) {
-                        HStack {
-                            Image(systemName: "bolt.heart.fill")
-                            Text("Defibrillation")
+                        .padding(.bottom, 20)
+
+                        // ECG Rhythm buttons
+                        HStack(spacing: 10) {
+                            ECGButton(title: "VT/VF", action: { guidelineSystem.recordECGRhythm("VT/VF") })
+                            ECGButton(title: "ROSC", action: {
+                                guidelineSystem.recordECGRhythm("ROSC")
+                                isROSCAchieved = true
+                                showPostCareAlert = true
+                            }, isSpecial: true)
+                            ECGButton(title: "PEA/AS", action: { guidelineSystem.recordECGRhythm("PEA/AS") })
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.red) // Changed from orange to red
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
-                        .font(.system(size: 28, weight: .bold))
+                        .frame(height: geometry.size.height * 0.18)
+
+                        Spacer().frame(height: 30)
+
+                        // Defibrillation Button
+                        Button(action: {
+                            resuscitationManager.performDefibrillation()
+                            guidelineSystem.recordShock()
+                        }) {
+                            HStack {
+                                Image(systemName: "bolt.heart.fill")
+                                Text("Defibrillation")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: geometry.size.height * 0.18)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                            .font(.system(size: 36, weight: .bold))
+                        }
+                        .disabled(isROSCAchieved)
+
+                        Spacer().frame(height: 30)
+
+                        // Medication buttons
+                        VStack(spacing: 15) {
+                            HStack(spacing: 10) {
+                                MedicationButton(title: "Adrenaline", action: {
+                                    guidelineSystem.recordAdrenaline()
+                                }, isSpecial: true)
+                                MedicationButton(title: "Amiodarone", action: {
+                                    // Add specific action for Amiodarone if needed
+                                }, isSpecial: true)
+                            }
+                            .frame(height: geometry.size.height * 0.14)
+                            HStack(spacing: 10) {
+                                MedicationButton(title: "Lidocaine", action: {
+                                    // Add specific action for Lidocaine if needed
+                                })
+                                MedicationButton(title: "Magnesium", action: {
+                                    // Add specific action for Magnesium if needed
+                                })
+                                MedicationButton(title: "Atropine", action: {
+                                    // Add specific action for Atropine if needed
+                                })
+                            }
+                            .frame(height: geometry.size.height * 0.14)
+                        }
                     }
-                    
-                    // Medication (title removed)
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                        MedicationButton(title: "Epinephrine", icon: "syringe.fill")
-                        MedicationButton(title: "Amiodarone", icon: "pill.fill")
-                        MedicationButton(title: "Lidocaine", icon: "cross.vial.fill")
-                        MedicationButton(title: "Magnesium", icon: "atom")
-                    }
-                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    .padding(.bottom, 30)
+                    .frame(width: geometry.size.width * 0.65)
+
+                    // Right side: Resuscitation Summary
+                    ResuscitationSummaryView()
+                        .frame(width: geometry.size.width * 0.35)
+                        .background(Color(UIColor.systemGray6))
                 }
-                .frame(width: geometry.size.width * 0.6)
-                .padding(.vertical)
-                
-                // Right side: Resuscitation Summary
-                ResuscitationSummaryView()
-                    .frame(width: geometry.size.width * 0.4)
-                    .background(Color.gray.opacity(0.1))
+
+                if guidelineSystem.showGuideline, let guideline = guidelineSystem.currentGuideline {
+                    GuidelineOverlay(guideline: guideline, dismissAction: {
+                        guidelineSystem.dismissCurrentGuideline()
+                    })
+                }
+                if showAttentionEffect {
+                    Color.red.opacity(0.3)
+                         .edgesIgnoringSafeArea(.all)
+                         .transition(.opacity)
+                         .animation(.easeInOut(duration: 0.5).repeatCount(3), value: showAttentionEffect)
+                }
             }
         }
         .onAppear {
-            startTimer()
-        }
-        .onDisappear {
-            stopTimer()
-        }
-        .alert(isPresented: $showEndConfirmation) {
+                    guidelineSystem.startGuideline()
+                }
+                .onDisappear {
+                    guidelineSystem.stopGuideline()
+                }
+                .alert(isPresented: $showEndConfirmation) {
                     Alert(
                         title: Text("End Resuscitation?"),
                         message: Text("Are you sure you want to end the resuscitation? This action cannot be undone."),
                         primaryButton: .destructive(Text("End Resuscitation")) {
-                            resuscitationManager.endResuscitation()
+                            endResuscitation()
                         },
                         secondaryButton: .cancel()
                     )
                 }
-    }
-    
+                .alert(isPresented: $showPostCareAlert) {
+                    Alert(
+                        title: Text("ROSC Achieved"),
+                        message: Text("Proceed to post-cardiac arrest care. You can continue recording events."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+            }
+
+
     private var formattedElapsedTime: String {
-        guard let startTime = resuscitationManager.resuscitationStartTime else { return "00:00" }
-        let elapsed = Int(currentTime.timeIntervalSince(startTime))
-        let minutes = elapsed / 60
-        let seconds = elapsed % 60
+        let minutes = Int(guidelineSystem.elapsedTime) / 60
+        let seconds = Int(guidelineSystem.elapsedTime) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            currentTime = Date()
+
+    private func endResuscitation() {
+        guidelineSystem.stopGuideline()
+        resuscitationManager.endResuscitation()
+        DispatchQueue.main.async {
+            self.presentationMode.wrappedValue.dismiss()
         }
     }
     
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-}
+    private func showAttentionSeekingEffect() {
+            showAttentionEffect = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showAttentionEffect = false
+            }
+        }
 
-struct ECGButton: View {
-    let title: String
-    let icon: String
-    @EnvironmentObject var resuscitationManager: ResuscitationManager
-    
-    var body: some View {
-        Button(action: {
-            resuscitationManager.events.append(ResuscitationEvent(type: .ecgRhythm(title), timestamp: Date()))
-        }) {
-            VStack {
-                Image(systemName: icon)
-                    .font(.system(size: 40))
+    // Helper Views
+    struct ECGButton: View {
+        let title: String
+        let action: () -> Void
+        var isSpecial: Bool = false
+        @EnvironmentObject var resuscitationManager: ResuscitationManager
+
+        var body: some View {
+            Button(action: {
+                resuscitationManager.events.append(ResuscitationEvent(type: .ecgRhythm(title), timestamp: Date()))
+                action()
+            }) {
                 Text(title)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: isSpecial ? 36 : 32, weight: isSpecial ? .bold : .semibold))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(isSpecial ? Color.blue.opacity(0.8) : Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(15)
             }
-            .frame(height: 120)
-            .frame(maxWidth: .infinity)
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(15)
         }
     }
-}
 
-struct MedicationButton: View {
-    let title: String
-    let icon: String
-    @EnvironmentObject var resuscitationManager: ResuscitationManager
-    
-    var body: some View {
-        Button(action: {
-            resuscitationManager.events.append(ResuscitationEvent(type: .medication(title), timestamp: Date()))
-        }) {
-            VStack {
-                Image(systemName: icon)
-                    .font(.system(size: 40))
+    struct MedicationButton: View {
+        let title: String
+        let action: () -> Void
+        var isSpecial: Bool = false
+        @EnvironmentObject var resuscitationManager: ResuscitationManager
+
+        var body: some View {
+            Button(action: {
+                resuscitationManager.events.append(ResuscitationEvent(type: .medication(title), timestamp: Date()))
+                action()
+            }) {
                 Text(title)
-                    .font(.system(size: 20, weight: .bold))
-                    .multilineTextAlignment(.center)
+                    .font(.system(size: isSpecial ? 32 : 28, weight: isSpecial ? .bold : .semibold))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(isSpecial ? Color.green.opacity(0.8) : Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(15)
             }
-            .frame(height: 120)
-            .frame(maxWidth: .infinity)
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(15)
         }
     }
-}
 
-struct ResuscitationSummaryView: View {
-    @EnvironmentObject var resuscitationManager: ResuscitationManager
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Resuscitation Summary")
-                .font(.system(size: 28, weight: .bold))
-            
-            if let startTime = resuscitationManager.resuscitationStartTime {
-                Text("Starting Time: \(formatDate(startTime))")
-                    .font(.system(size: 20))
-            }
-            
-            Divider()
-            
-            ScrollView(.vertical, showsIndicators: true) {
-                LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(resuscitationManager.events.reversed(), id: \.id) { event in
-                        HStack {
-                            Text(formatDate(event.timestamp))
-                                .font(.system(size: 18, design: .monospaced))
-                                .foregroundColor(.secondary)
-                            eventIcon(for: event)
-                            Text(eventDescription(event))
-                                .font(.system(size: 18))
-                        }
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.white.opacity(0.6))
-                        .cornerRadius(8)
+    struct GuidelineOverlay: View {
+        let guideline: SmartResuscitationGuidelineSystem.ResuscitationGuideline
+        let dismissAction: () -> Void
+        var body: some View {
+            ZStack {
+                Color.black.opacity(0.4)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        dismissAction()
                     }
+
+                VStack {
+                    Text(guideline.message)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .frame(maxWidth: 300)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 10)
                 }
-                .padding(.trailing, 10)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text("Medication Counts:")
-                    .font(.system(size: 20, weight: .bold))
-                ForEach(medicationCounts.sorted(by: { $0.key < $1.key }), id: \.key) { medication, count in
-                    Text("\(medication): \(count)")
-                        .font(.system(size: 18))
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-        }
-        .padding()
-    }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter.string(from: date)
-    }
-    
-    private func eventIcon(for event: ResuscitationEvent) -> some View {
-        switch event.type {
-        case .ecgRhythm:
-            return Image(systemName: "waveform.path.ecg")
-        case .medication:
-            return Image(systemName: "pill.fill")
-        case .defibrillation:
-            return Image(systemName: "bolt.heart.fill")
-        case .alert:
-            return Image(systemName: "exclamationmark.triangle.fill")
+            .transition(.opacity)
+            .animation(.easeInOut(duration: 0.3), value: guideline.id)
         }
     }
-    
-    private func eventDescription(_ event: ResuscitationEvent) -> String {
-        switch event.type {
-        case .ecgRhythm(let rhythm):
-            return "ECG Rhythm: \(rhythm)"
-        case .medication(let medication):
-            return "Medication: \(medication)"
-        case .defibrillation:
-            return "Defibrillation performed"
-        case .alert(let message):
-            return "Alert: \(message)"
-        }
-    }
-    
-    private var medicationCounts: [String: Int] {
-            var counts: [String: Int] = [:]
-            for event in resuscitationManager.events {
-                if case .medication(let medication) = event.type {
-                    counts[medication, default: 0] += 1
-                }
-            }
-            return counts
-        }
 }

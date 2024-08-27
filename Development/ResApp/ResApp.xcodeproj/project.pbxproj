@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		911480362C64840F00579FA4 /* CPRProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911480352C64840F00579FA4 /* CPRProtocolManager.swift */; };
+		91C33EE22C786C190092BCE3 /* ResuscitationSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */; };
+		91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */; };
 		91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FBE2C636B8800E87A87 /* ResAppApp.swift */; };
 		91C80FC12C636B8800E87A87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FC02C636B8800E87A87 /* ContentView.swift */; };
 		91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91C80FC22C636B8C00E87A87 /* Assets.xcassets */; };
@@ -15,7 +16,7 @@
 		91C80FD02C636B8C00E87A87 /* ResAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FCF2C636B8C00E87A87 /* ResAppTests.swift */; };
 		91C80FDA2C636B8C00E87A87 /* ResAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FD92C636B8C00E87A87 /* ResAppUITests.swift */; };
 		91C80FDC2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */; };
-		91C80FE92C636BC600E87A87 /* ResuscitationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationModels.swift */; };
+		91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */; };
 		91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		911480352C64840F00579FA4 /* CPRProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPRProtocolManager.swift; sourceTree = "<group>"; };
+		91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationSummaryView.swift; sourceTree = "<group>"; };
+		91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationGuidelineSystem.swift; sourceTree = "<group>"; };
 		91C80FBB2C636B8800E87A87 /* ResApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FBE2C636B8800E87A87 /* ResAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppApp.swift; sourceTree = "<group>"; };
 		91C80FC02C636B8800E87A87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,7 +50,7 @@
 		91C80FD52C636B8C00E87A87 /* ResAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FD92C636B8C00E87A87 /* ResAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITests.swift; sourceTree = "<group>"; };
 		91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		91C80FE82C636BC600E87A87 /* ResuscitationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationModels.swift; sourceTree = "<group>"; };
+		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationManager.swift; sourceTree = "<group>"; };
 		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalButtonView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,9 +106,10 @@
 				91C80FC02C636B8800E87A87 /* ContentView.swift */,
 				91C80FC22C636B8C00E87A87 /* Assets.xcassets */,
 				91C80FC42C636B8C00E87A87 /* Preview Content */,
-				91C80FE82C636BC600E87A87 /* ResuscitationModels.swift */,
+				91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */,
 				91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */,
-				911480352C64840F00579FA4 /* CPRProtocolManager.swift */,
+				91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */,
+				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
 			);
 			path = ResApp;
 			sourceTree = "<group>";
@@ -266,11 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				911480362C64840F00579FA4 /* CPRProtocolManager.swift in Sources */,
+				91C33EE22C786C190092BCE3 /* ResuscitationSummaryView.swift in Sources */,
 				91C80FC12C636B8800E87A87 /* ContentView.swift in Sources */,
-				91C80FE92C636BC600E87A87 /* ResuscitationModels.swift in Sources */,
+				91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */,
 				91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */,
 				91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */,
+				91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
