@@ -13,23 +13,35 @@ struct ResuscitationEvent: Identifiable {
     let timestamp: Date
 }
 
+import SwiftUI
+
 class ResuscitationManager: ObservableObject {
     @Published var isResuscitationStarted = false
     @Published var events: [ResuscitationEvent] = []
     @Published var resuscitationStartTime: Date?
     @Published var shouldShowAttentionEffect = false
+    @Published var currentSessionID = UUID()
+    
+    // Add this line to create an instance of SmartResuscitationGuidelineSystem
+    @Published var guidelineSystem = SmartResuscitationGuidelineSystem()
 
+        
     func startResuscitation() {
-        isResuscitationStarted = true
-        resuscitationStartTime = Date()
-        events = []
+            isResuscitationStarted = true
+            resuscitationStartTime = Date()
+            events = []
+            currentSessionID = UUID()
+            
+            // Now we can directly access guidelineSystem
+            guidelineSystem.resetGuideline()
     }
-
+    
     func endResuscitation() {
-        isResuscitationStarted = false
-        events = []
-        resuscitationStartTime = nil
-    }
+            isResuscitationStarted = false
+            events = []
+            resuscitationStartTime = nil
+            guidelineSystem.stopGuideline() // Add this line to stop the guideline system
+        }
 
     func performDefibrillation() {
         events.append(ResuscitationEvent(type: .defibrillation, timestamp: Date()))

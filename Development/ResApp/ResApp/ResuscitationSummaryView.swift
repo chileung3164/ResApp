@@ -16,8 +16,8 @@ struct ResuscitationSummaryView: View {
             Divider()
             
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(resuscitationManager.events.reversed()) { event in
+                    LazyVStack(alignment: .leading, spacing: 8) {
+                        ForEach(resuscitationManager.events.reversed()) { event in
                         HStack {
                             Text(formatDate(event.timestamp))
                                 .font(.system(size: 18, design: .monospaced))
@@ -30,6 +30,7 @@ struct ResuscitationSummaryView: View {
                     }
                 }
             }
+            
             
             Divider()
             
