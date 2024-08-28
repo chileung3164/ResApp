@@ -8,6 +8,8 @@ struct FunctionalButtonView: View {
     @State private var showPostCareAlert = false
     @State private var isROSCAchieved = false
     @State private var audioPlayer: AVAudioPlayer?
+    @State private var defibrillationCounter: Int = 0
+    @State private var defibrillationTimer: Timer?
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -55,11 +57,18 @@ struct FunctionalButtonView: View {
                         // Defibrillation Button
                         Button(action: {
                             resuscitationManager.performDefibrillation()
+                            startOrResetDefibrillationCounter()
                         }) {
                             HStack {
-                                Image(systemName: "bolt.heart.fill")
+                                Text(formattedDefibrillationTime)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.white.opacity(0.8))
+                                Spacer()
                                 Text("Defibrillation")
+                                Spacer()
+                                Image(systemName: "bolt.heart.fill")
                             }
+                            .padding()
                             .frame(maxWidth: .infinity)
                             .frame(height: geometry.size.height * 0.18)
                             .background(Color.red)
@@ -127,6 +136,7 @@ struct FunctionalButtonView: View {
         }
         .onDisappear {
             guidelineSystem.stopGuideline()
+            stopDefibrillationCounter()
             print("FunctionalButtonView disappeared")
         }
         .alert("End Resuscitation?", isPresented: $showEndConfirmation) {
@@ -152,8 +162,15 @@ struct FunctionalButtonView: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
+    private var formattedDefibrillationTime: String {
+        let minutes = defibrillationCounter / 60
+        let seconds = defibrillationCounter % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+
     private func endResuscitation() {
         guidelineSystem.stopGuideline()
+        stopDefibrillationCounter()
         resuscitationManager.endResuscitation()
         resuscitationManager.isResuscitationStarted = false
     }
@@ -175,6 +192,24 @@ struct FunctionalButtonView: View {
 
     private func playSound() {
         audioPlayer?.play()
+    }
+
+    private func startOrResetDefibrillationCounter() {
+        if defibrillationTimer == nil {
+            // Start the timer if it's not running
+            defibrillationCounter = 0
+            defibrillationTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                defibrillationCounter += 1
+            }
+        } else {
+            // Reset the counter if the timer is already running
+            defibrillationCounter = 0
+        }
+    }
+
+    private func stopDefibrillationCounter() {
+        defibrillationTimer?.invalidate()
+        defibrillationTimer = nil
     }
 }
 

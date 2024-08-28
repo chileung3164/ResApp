@@ -19,7 +19,6 @@
 		91C80FDC2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */; };
 		91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */; };
 		91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */; };
-		91DB0F142C7F0C42005E85DE /* copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB0F132C7F0C42005E85DE /* copy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +54,6 @@
 		91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationManager.swift; sourceTree = "<group>"; };
 		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalButtonView.swift; sourceTree = "<group>"; };
-		91DB0F132C7F0C42005E85DE /* copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = copy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +113,6 @@
 				91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */,
 				91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */,
 				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
-				91DB0F132C7F0C42005E85DE /* copy.swift */,
 			);
 			path = ResApp;
 			sourceTree = "<group>";
@@ -280,7 +277,6 @@
 				91C80FC12C636B8800E87A87 /* ContentView.swift in Sources */,
 				91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */,
 				91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */,
-				91DB0F142C7F0C42005E85DE /* copy.swift in Sources */,
 				91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */,
 				91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */,
 			);
