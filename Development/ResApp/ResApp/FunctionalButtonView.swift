@@ -118,13 +118,14 @@ struct FunctionalButtonView: View {
 
                 // Guideline Overlay
                 if guidelineSystem.showGuideline, let guideline = guidelineSystem.currentGuideline {
-                    GuidelineOverlay(guideline: guideline) {
-                        guidelineSystem.dismissCurrentGuideline()
-                    }
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.3), value: guideline.id)
-                    .onAppear {
-                        playSound()
+                                   GuidelineOverlay(guideline: guideline) {
+                                       guidelineSystem.dismissCurrentGuideline()
+                                       stopSound()
+                                   }
+                                   .transition(.opacity)
+                                   .animation(.easeInOut(duration: 0.3), value: guideline.id)
+                                   .onAppear {
+                                       playLoopingSound()
                     }
                 }
             }
@@ -137,6 +138,7 @@ struct FunctionalButtonView: View {
         .onDisappear {
             guidelineSystem.stopGuideline()
             stopDefibrillationCounter()
+            stopSound()
             print("FunctionalButtonView disappeared")
         }
         .alert("End Resuscitation?", isPresented: $showEndConfirmation) {
@@ -176,23 +178,29 @@ struct FunctionalButtonView: View {
     }
 
     private func setupAudioPlayer() {
-        guard let soundURL = Bundle.main.url(forResource: "level-up-191997", withExtension: "mp3") else {
-            print("Sound file 'level-up-191997.mp3' not found in the app bundle.")
-            return
+            guard let soundURL = Bundle.main.url(forResource: "buzzer", withExtension: "wav") else {
+                print("Sound file 'buzzer.wav' not found in the app bundle.")
+                return
+            }
+
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+                audioPlayer?.numberOfLoops = -1 // Set to loop indefinitely
+                audioPlayer?.prepareToPlay()
+                print("Audio player set up successfully.")
+            } catch {
+                print("Error setting up audio player: \(error.localizedDescription)")
+            }
+        }
+    
+    private func playLoopingSound() {
+            audioPlayer?.play()
         }
 
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-            audioPlayer?.prepareToPlay()
-            print("Audio player set up successfully.")
-        } catch {
-            print("Error setting up audio player: \(error.localizedDescription)")
+        private func stopSound() {
+            audioPlayer?.stop()
+            audioPlayer?.currentTime = 0
         }
-    }
-
-    private func playSound() {
-        audioPlayer?.play()
-    }
 
     private func startOrResetDefibrillationCounter() {
         if defibrillationTimer == nil {

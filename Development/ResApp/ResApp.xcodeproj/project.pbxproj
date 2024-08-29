@@ -19,6 +19,7 @@
 		91C80FDC2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */; };
 		91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */; };
 		91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */; };
+		91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 91DB0F152C7F2CFB005E85DE /* buzzer.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationManager.swift; sourceTree = "<group>"; };
 		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalButtonView.swift; sourceTree = "<group>"; };
+		91DB0F152C7F2CFB005E85DE /* buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buzzer.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 		91C80FBD2C636B8800E87A87 /* ResApp */ = {
 			isa = PBXGroup;
 			children = (
+				91DB0F152C7F2CFB005E85DE /* buzzer.wav */,
 				91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */,
 				91C80FBE2C636B8800E87A87 /* ResAppApp.swift */,
 				91C80FC02C636B8800E87A87 /* ContentView.swift */,
@@ -246,6 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */,
 				91C80FC62C636B8C00E87A87 /* Preview Assets.xcassets in Resources */,
 				91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */,
 				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,
